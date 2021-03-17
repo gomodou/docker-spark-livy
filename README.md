@@ -48,6 +48,7 @@ Access the UIs:
 1. Spark Master at spark://master:7077 (http://localhost:8080/).
 2. Spark Worker at 172.20.0.2:8881 (http://localhost:8081/).
 3. Livy UI at 172.20.0.3:8998 (http://localhost:8081/).
+4. `PGPASSWORD=modoumaster psql -h "localhost" -p 5432 -U modoumaster modou`
 
 Test Spark and Livy using `API`.
 ```sh
