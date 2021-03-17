@@ -53,30 +53,6 @@ services:
       - ./conf/worker:/conf
       - ./data:/tmp/data
 
-  #spark-worker-2:
-  #  image: gettyimages/spark
-  #  command: bin/spark-class org.apache.spark.deploy.worker.Worker spark://master:7077
-  #  container_name: spark-worker-2
-  #  environment:
-  #    SPARK_CONF_DIR: /conf
-  #    SPARK_WORKER_CORES: 1
-  #    SPARK_WORKER_MEMORY: 512mb
-  #    SPARK_WORKER_PORT: 8882
-  #    SPARK_WORKER_WEBUI_PORT: 8082
-  #    SPARK_PUBLIC_DNS: localhost
-  #  links:
-  #    - spark-master
-  #  expose:
-  #    - 7012
-  #    - 7013
-  #    - 7014
-  #    - 7015
-  #    - 8881
-  #  ports:
-  #    - 8082:8082
-  #  volumes:
-  #    - ./conf/worker:/conf
-  #    - ./data:/tmp/data
   livy:
     image: renien/spark-stand-alone-livy
     container_name: livy
@@ -96,3 +72,31 @@ services:
     depends_on:
       - "spark-master"
       - "spark-worker-1"
+
+  postgres:
+    # $ PGPASSWORD=modoumaster psql -h "localhost" -p 5432 -U modoumaster modou
+    image: postgres:9.6
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=modoumaster
+      - POSTGRES_PASSWORD=modoumaster
+      - POSTGRES_DB=modou
+      - PGDATA=/var/lib/postgresql/data
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+      - ./db:/db/
+  redis:
+    image: 'docker.io/bitnami/redis:6.2-debian-10'
+    environment:
+      # ALLOW_EMPTY_PASSWORD is recommended only for development.
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
+    ports:
+      - '6379:6379'
+    volumes:
+      - 'redis_data:/bitnami/redis/data'
+
+volumes:
+  redis_data:
+    driver: local
