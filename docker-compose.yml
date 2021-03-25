@@ -74,13 +74,13 @@ services:
       - "spark-worker-1"
 
   postgres:
-    # $ PGPASSWORD=modoumaster psql -h "localhost" -p 5432 -U modoumaster modou
+    # $ PGPASSWORD=123456 psql -h "localhost" -p 5432 -U postgres modou
     image: postgres:9.6
     ports:
       - 5432:5432
     environment:
-      - POSTGRES_USER=modoumaster
-      - POSTGRES_PASSWORD=modoumaster
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=123456
       - POSTGRES_DB=modou
       - PGDATA=/var/lib/postgresql/data
     volumes:
