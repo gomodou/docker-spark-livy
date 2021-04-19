@@ -65,7 +65,7 @@ services:
       - LIVY_FILE_LOCAL_DIR_WHITELIST=/opt/jars
     ports:
       - 8998:8998
-      - 4040:4040
+#      - 4040:4040
     volumes:
       - $PWD/jars:/opt/jars
       - $PWD/conf/livy/livy.conf.extra:/usr/local/bin/livy.conf.extra
@@ -96,7 +96,20 @@ services:
       - '6379:6379'
     volumes:
       - 'redis_data:/bitnami/redis/data'
-
+  
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: 'rabbitmq'
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - ./rabbitmq/data/:/var/lib/rabbitmq/
+      - ./rabbitmq/log/:/var/log/rabbitmq
+    
 volumes:
   redis_data:
     driver: local
